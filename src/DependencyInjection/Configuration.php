@@ -13,12 +13,11 @@ class Configuration implements ConfigurationInterface
 
         $treeBuilder->getRootNode()
             ->children()
-                ->arrayNode('tags')
-                    ->prototype('scalar')->end()
-                ->end()
-                ->booleanNode('og')->end()
+                ->arrayNode('tags')->prototype('scalar')->end()->end()
+                ->arrayNode('og')->prototype('scalar')->end()->end()
+                ->arrayNode('tw')->prototype('scalar')->end()->end()
                 ->booleanNode('auto_url')->end()
-                ->booleanNode('tw')->end()
+
             ->end()
         ;
 

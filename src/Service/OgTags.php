@@ -5,11 +5,9 @@ namespace retrobon\MetaTagsBundle\Service;
 use retrobon\MetaTagsBundle\Interfaces\MetaTagsInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class MetaTags implements MetaTagsInterface
+class Og implements MetaTagsInterface
 {
-    protected bool $canonical = false;
     protected array $supported = ['title', 'description'];
-    protected array $tw = [];
     protected array $og = [];
     protected array $tags = [];
     private array $conf;
@@ -39,6 +37,8 @@ class MetaTags implements MetaTagsInterface
             $this->meta($n, $v);
         }
     }
+
+
 
     /**
      * @param string $name
