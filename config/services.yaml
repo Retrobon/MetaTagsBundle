@@ -1,0 +1,10 @@
+parameters:
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+  retrobon\MetaTagsBundle\Service\MetaTags: ~
+  retrobon\MetaTagsBundle\Twig\MetaTagsTwigExtension: ~
+
+
