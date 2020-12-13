@@ -1,5 +1,6 @@
 ## Installation
 Install the bundle with the command:
+`composer require retrobon/metatags-bundle`
 
 ## Configuration
 
@@ -36,5 +37,3 @@ or add array value in twig:
     {{ metaTags({'title': 'test'}) }}
 </head>
 ```
-## Todo
-* Packagist
