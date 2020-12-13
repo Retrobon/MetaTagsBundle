@@ -4,7 +4,8 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
-  retrobon\MetaTagsBundle\Service\MetaTags: ~
   retrobon\MetaTagsBundle\Twig\MetaTagsTwigExtension: ~
+  retrobon\MetaTagsBundle\Service\:
+    resource: '../src/Service/'
 
 

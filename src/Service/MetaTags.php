@@ -3,29 +3,10 @@
 namespace retrobon\MetaTagsBundle\Service;
 
 use retrobon\MetaTagsBundle\Interfaces\MetaTagsInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class MetaTags implements MetaTagsInterface
 {
-    protected bool $canonical = false;
     protected array $tags = [];
-    private array $conf;
-
-    /**
-     * @var RequestStack
-     */
-    private RequestStack $requestStack;
-
-    /**
-     * MetaTags constructor.
-     * @param RequestStack $requestStack
-     * @param array $conf
-     */
-    public function __construct(RequestStack $requestStack, array $conf = [])
-    {
-        $this->conf = $conf;
-        $this->requestStack = $requestStack;
-    }
 
     /**
      * @param array $tags
@@ -35,6 +16,14 @@ class MetaTags implements MetaTagsInterface
         foreach ($tags as $n => $v) {
             $this->meta($n, $v);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getTags(): array
+    {
+        return $this->tags;
     }
 
     /**
@@ -51,8 +40,8 @@ class MetaTags implements MetaTagsInterface
             case 'canonical':
                 return $this->canonical($value);
                 break;
-            case 'url':
-                return $this->url($value);
+            case 'shortlink':
+                return $this->shortlink($value);
                 break;
             default:
                 $this->push('meta', ['name' => $name, 'content' => $value], false);
@@ -60,6 +49,10 @@ class MetaTags implements MetaTagsInterface
         return $this;
     }
 
+    /**
+     * @param string $value
+     * @return MetaTagsInterface
+     */
     public function title(string $value): MetaTagsInterface
     {
         return $this->push(
@@ -73,7 +66,6 @@ class MetaTags implements MetaTagsInterface
      */
     public function canonical(string $url): MetaTagsInterface
     {
-        $this->canonical = true;
         return $this->push('link', ['rel' => 'canonical', 'href' => $url], false);
     }
 
@@ -86,7 +78,6 @@ class MetaTags implements MetaTagsInterface
         return $this->push('link', ['rel' => 'shortlink', 'href' => $url], false);
     }
 
-
     /**
      * @param string $name
      * @param array $attrs
@@ -95,7 +86,13 @@ class MetaTags implements MetaTagsInterface
      */
     public function push(string $name, array $attrs, $endTag = false): MetaTagsInterface
     {
-        $this->tags[] = ['name' => $name, 'value' => $attrs, 'trailing_tag' => $endTag];
+        if (!isset($attrs['name'])) {
+            $index = $attrs['rel'];
+        } else {
+            $index = $attrs['name'];
+        }
+        $this->tags[$index] = ['name' => $name, 'value' => $attrs, 'trailing_tag' => $endTag];
+
         return $this;
     }
 
@@ -105,6 +102,7 @@ class MetaTags implements MetaTagsInterface
      */
     public function build(array $tags): string
     {
+
         $out = '';
         foreach ($tags as $tag) {
             if ($tag['trailing_tag']) {
@@ -125,13 +123,6 @@ class MetaTags implements MetaTagsInterface
      */
     public function __toString(): string
     {
-        if (!$this->tags) {
-            $this->setTags($this->conf['tags']);
-        }
-
-        $request = $this->requestStack->getCurrentRequest();
-        $this->canonical($request->getSchemeAndHttpHost() . $request->getPathInfo());
-
         return $this->build($this->tags);
     }
 }

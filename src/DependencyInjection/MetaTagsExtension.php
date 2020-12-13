@@ -3,7 +3,6 @@
 namespace retrobon\MetaTagsBundle\DependencyInjection;
 
 use Exception;
-use retrobon\MetaTagsBundle\Service\MetaTags;
 use retrobon\MetaTagsBundle\Twig\MetaTagsTwigExtension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,8 +20,7 @@ class MetaTagsExtension extends Extension
         $loader->load('services.yaml');
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-
-        $definition = $container->getDefinition(MetaTags::class);
+        $definition = $container->getDefinition(MetaTagsTwigExtension::class);
         $definition->setArguments([
             '$conf' => $config,
         ]);
