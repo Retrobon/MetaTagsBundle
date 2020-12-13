@@ -5,7 +5,8 @@
   "description": "Symfony MetaTags bundles",
   "license": "proprietary",
   "require": {
-    "php": "^7.4"
+    "php": "^7.4",
+    "symfony/framework-bundle": "^5"
   },
   "require-dev": {
   },
